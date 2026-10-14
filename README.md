@@ -175,7 +175,8 @@ Replace each placeholder with the appropriate value **on the computer where the 
 
 These PowerShell environment variables apply to the current terminal session. If you open another terminal, set them again there before starting the application. Do not add real credentials to this README or the submitted ZIP.
 
-**Admin username:** `admin`  
+**Counsellor username:** `counsellor`
+
 **Admin password:** the value supplied through `ADMIN_PASSWORD`.
 
 The submitted `SecurityConfig.java` expects the `ADMIN_PASSWORD` environment variable. If it is missing, application startup may fail.
@@ -209,7 +210,7 @@ Wait until Spring Boot reports that the application has started on port 8080. Do
 
 ## 7. REST API Testing Using Postman
 
-The base URL is `http://localhost:8080`. Admin and API endpoints require a logged-in admin session.
+The base URL is `http://localhost:8080`. Read-only GET requests are public. POST requests require an authenticated counsellor session and a valid CSRF token.
 
 ### GET Student Enquiries
 
@@ -264,7 +265,7 @@ Example response **from a previous development test**:
 
 ### Important: Spring Security and CSRF
 
-Spring Security protects `/admin/**` and `/api/**` endpoints. Sign in as `admin` and use the authenticated session in Postman. POST requests also require a valid CSRF token, for example in the `X-CSRF-TOKEN` header. Obtain the current token from a page in the same authenticated session. After a server restart or a new login, the token or session may need to be refreshed.
+Spring Security protects `/admin/**` and API write requests. For POST requests, sign in as `counsellor` using the `ADMIN_PASSWORD` value and use that authenticated session in Postman. POST requests also require a valid CSRF token, for example in the `X-CSRF-TOKEN` header. Obtain the current token from a page in the same authenticated session. After a server restart or a new login, the token or session may need to be refreshed.
 
 ## 8. Validation and Test Results
 

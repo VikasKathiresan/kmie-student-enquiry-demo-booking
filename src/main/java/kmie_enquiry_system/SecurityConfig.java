@@ -29,7 +29,9 @@ public class SecurityConfig {
                         "/js/**", "/images/**",
                         "/counsellor/login", "/login").permitAll()
                     .requestMatchers(HttpMethod.GET,
+                        "/api/enquiries",
                         "/api/enquiries/list",
+                        "/api/bookings",
                         "/api/bookings/list").permitAll()
                     .requestMatchers("/admin/**", "/api/**")
                         .hasRole("COUNSELLOR")
