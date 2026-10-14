@@ -1,0 +1,401 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KMIE | Student Enquiry & Demo Booking</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fc;
+            color: #17233c;
+        }
+
+        header {
+            background: #10234f;
+            color: white;
+            padding: 20px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        header h2 {
+            color: #75d6ff;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 22px;
+        }
+
+        nav a:hover {
+            color: #75d6ff;
+        }
+
+        .hero {
+            padding: 85px 8%;
+            background: linear-gradient(120deg, #10234f, #245c9c);
+            color: white;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: clamp(32px, 5vw, 52px);
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            max-width: 680px;
+            margin: 0 auto 28px;
+            line-height: 1.8;
+            color: #e0edff;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 13px 23px;
+            background: #20b8df;
+            color: #10234f;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 7px;
+            margin: 5px;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #8be5ff;
+        }
+
+        .section {
+            padding: 55px 8%;
+            text-align: center;
+        }
+
+        .section h2 {
+            margin-bottom: 15px;
+            font-size: 30px;
+        }
+
+        .section-intro {
+            color: #61708a;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns:
+                repeat(auto-fit, minmax(220px, 1fr));
+            gap: 22px;
+            margin-top: 30px;
+        }
+
+        .card {
+            background: white;
+            padding: 28px 22px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px #10234f12;
+            text-align: left;
+            height: 100%;
+        }
+
+        .card .symbol {
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            margin-bottom: 12px;
+            color: #18396e;
+        }
+
+        .card p {
+            color: #61708a;
+            line-height: 1.7;
+        }
+
+        /* New clickable service cards */
+        .card-link {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        .card-link .card {
+            transition:
+                transform 0.3s ease,
+                box-shadow 0.3s ease;
+        }
+
+        .card-link:hover .card,
+        .card-link:focus-visible .card {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 28px
+                rgba(16, 35, 79, 0.16);
+        }
+
+        .card-link:focus-visible {
+            outline: 3px solid #20b8df;
+            outline-offset: 4px;
+        }
+
+        .card-link:hover h3 {
+            color: #087db4;
+        }
+
+        .steps {
+            background: #eaf2ff;
+        }
+
+        footer {
+            background: #10234f;
+            color: white;
+            text-align: center;
+            padding: 24px;
+            line-height: 1.8;
+        }
+
+        @media (max-width: 700px) {
+            header {
+                padding: 18px 5%;
+            }
+
+            nav a {
+                margin-left: 0;
+                margin-right: 12px;
+                line-height: 2;
+            }
+
+            .hero {
+                padding: 60px 6%;
+            }
+
+            .section {
+                padding: 40px 6%;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+
+            .card-link .card {
+                transition: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h2>KMIE</h2>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="#services">Services</a>
+        <a href="#process">How It Works</a>
+        <a href="#contact">Contact</a>
+    </nav>
+</header>
+
+<main>
+
+    <!-- Homepage Hero Section -->
+    <section class="hero">
+
+        <h1>Your Learning Journey Starts Here</h1>
+
+        <p>
+            Welcome to KMIE! Explore NEET and JEE coaching
+            opportunities, submit your student enquiry,
+            and book a demo session to learn more
+            about the courses that match your goals.
+        </p>
+
+        <a class="btn" href="#services">
+            Explore Services
+        </a>
+
+        <a class="btn" href="#contact">
+            Contact KMIE
+        </a>
+
+    </section>
+
+    <!-- Services Section -->
+    <section class="section" id="services">
+
+        <h2>How Can We Help You?</h2>
+
+        <p class="section-intro">
+            Get started with our student enquiry
+            and demo booking process.
+        </p>
+
+        <div class="cards">
+
+            <!-- Student Enquiry -->
+            <a href="/enquiry" class="card-link">
+
+                <article class="card">
+
+                    <div class="symbol">📩</div>
+
+                    <h3>Student Enquiry</h3>
+
+                    <p>
+                        Register your interest in NEET or JEE
+                        coaching. Enter your details, select
+                        Class 11 or 12, and submit an enquiry.
+                    </p>
+
+                </article>
+
+            </a>
+
+            <!-- Demo Booking -->
+            <a href="/demo-booking" class="card-link">
+
+                <article class="card">
+
+                    <div class="symbol">📅</div>
+
+                    <h3>Demo Booking</h3>
+
+                    <p>
+                        Book your preferred demo class date
+                        and choose from the available slots:
+                        1 PM, 3 PM, 5 PM or 7 PM.
+                    </p>
+
+                </article>
+
+            </a>
+
+            <!-- Counsellor / Admin Dashboard -->
+            <a href="/admin/enquiries" class="card-link">
+
+                <article class="card">
+
+                    <div class="symbol">⚡</div>
+
+                    <h3>Smart Follow-up</h3>
+
+                    <p>
+                        Counsellor access to view student
+                        enquiries and manage demo requests
+                        and follow-ups.
+                    </p>
+
+                </article>
+
+            </a>
+
+        </div>
+
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="section steps" id="process">
+
+        <h2>Simple. Convenient. Organized.</h2>
+
+        <p class="section-intro">
+            Follow these steps to connect with KMIE.
+        </p>
+
+        <div class="cards">
+
+            <article class="card">
+
+                <h3>01. Enquire</h3>
+
+                <p>
+                    Enter your student details,
+                    select your class and choose
+                    NEET or JEE coaching.
+                </p>
+
+            </article>
+
+            <article class="card">
+
+                <h3>02. Book a Demo</h3>
+
+                <p>
+                    Choose a suitable demo date
+                    and available time slot.
+                </p>
+
+            </article>
+
+            <article class="card">
+
+                <h3>03. Follow Up</h3>
+
+                <p>
+                    Our counsellors review enquiries,
+                    bookings and student requests.
+                </p>
+
+            </article>
+
+        </div>
+
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section" id="contact">
+
+        <h2>Ready to Get Started?</h2>
+
+        <p class="section-intro">
+            Take the first step toward your learning goals.
+        </p>
+
+        <a class="btn" href="/enquiry">
+            Submit an Enquiry
+        </a>
+
+    </section>
+
+</main>
+
+<footer>
+
+    <p>
+        KMIE Student Enquiry & Demo Booking
+        Automation System
+    </p>
+
+    <p>© 2026 KMIE. All rights reserved.</p>
+
+</footer>
+
+</body>
+</html>

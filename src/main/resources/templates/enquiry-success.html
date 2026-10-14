@@ -1,0 +1,99 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enquiry Submitted | KMIE</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+        }
+
+        .success-card {
+            width: 100%;
+            max-width: 500px;
+            padding: 40px 30px;
+            text-align: center;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px #00000012;
+        }
+
+        .check {
+            width: 75px;
+            height: 75px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: #dcfce7;
+            color: #15803d;
+            font-size: 42px;
+        }
+
+        h1 {
+            color: #142b52;
+        }
+
+        p {
+            color: #64748b;
+            line-height: 1.7;
+        }
+
+        .student-name {
+            color: #0f766e;
+            font-weight: bold;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 13px 25px;
+            border-radius: 7px;
+            background: #142b52;
+            color: white;
+            text-decoration: none;
+        }
+
+        a:hover {
+            background: #1e40af;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="success-card">
+    <div class="check">&#10003;</div>
+
+    <h1>Enquiry Submitted!</h1>
+
+    <p>
+        Thank you,
+        <span class="student-name" th:text="${studentName}">Student</span>!
+    </p>
+
+    <p>
+        Your enquiry has been received successfully.
+        Our team will review your details and contact you.
+    </p>
+
+    <a href="/">Back to Home</a>
+</div>
+
+</body>
+</html>

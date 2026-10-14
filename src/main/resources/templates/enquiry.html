@@ -1,0 +1,219 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Enquiry | KMIE</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            color: #172554;
+        }
+
+        header {
+            background: #142b52;
+            color: white;
+            padding: 18px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h2 {
+            margin: 0;
+            color: #54c8f5;
+        }
+
+        header a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 40px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 8px 25px #00000012;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 0;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 28px;
+        }
+
+        .error-message {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+            padding: 14px;
+            border-radius: 7px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        label {
+            display: block;
+            margin: 16px 0 7px;
+            font-weight: bold;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            font-size: 15px;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 24px;
+            padding: 14px;
+            border: none;
+            border-radius: 7px;
+            background: #16b5d5;
+            color: #082f49;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #38c8e4;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #64748b;
+        }
+
+        @media (max-width: 700px) {
+            .container {
+                margin: 20px;
+                padding: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h2>KMIE</h2>
+    <a href="/">Home</a>
+</header>
+
+<div class="container">
+
+    <h1>Student Enquiry Form</h1>
+
+    <p class="subtitle">
+        Register your interest in NEET or JEE coaching.
+    </p>
+
+    <!-- Display validation or duplicate errors -->
+    <div th:if="${error}"
+         th:text="${error}"
+         class="error-message"
+         role="alert">
+    </div>
+
+    <form action="/enquiry" method="post">
+
+        <!-- Spring Security CSRF Token -->
+        <input type="hidden"
+               th:name="${_csrf.parameterName}"
+               th:value="${_csrf.token}">
+
+        <label for="fullName">Full Name *</label>
+        <input type="text"
+               id="fullName"
+               name="fullName"
+               placeholder="Enter your full name"
+               required>
+
+        <label for="email">Email Address *</label>
+        <input type="email"
+               id="email"
+               name="email"
+               placeholder="Enter your email"
+               required>
+
+        <label for="phone">Mobile Number *</label>
+        <input type="tel"
+               id="phone"
+               name="phone"
+               placeholder="Enter 10-digit mobile number"
+               pattern="[0-9]{10}"
+               minlength="10"
+               maxlength="10"
+               title="Please enter exactly 10 digits"
+               required>
+
+        <label for="studentClass">Student Class *</label>
+        <select id="studentClass"
+                name="studentClass"
+                required>
+
+            <option value="">Select your class</option>
+            <option value="11">Class 11</option>
+            <option value="12">Class 12</option>
+        </select>
+
+        <label for="course">Interested Course *</label>
+        <select id="course"
+                name="course"
+                required>
+
+            <option value="">Select a course</option>
+            <option value="NEET">NEET</option>
+            <option value="JEE">JEE</option>
+        </select>
+
+        <label for="enquiryDate">Enquiry Date</label>
+        <input type="date"
+               id="enquiryDate"
+               th:value="${#temporals.format(#temporals.createToday(), 'yyyy-MM-dd')}"
+               readonly>
+
+        <label for="message">Your Message (Optional)</label>
+        <textarea id="message"
+                  name="message"
+                  rows="4"
+                  placeholder="Tell us what you want to learn"></textarea>
+
+        <button type="submit">
+            Submit Enquiry
+        </button>
+
+    </form>
+</div>
+
+<footer>
+    © 2026 KMIE | Student Enquiry & Demo Booking System
+</footer>
+
+</body>
+</html>
