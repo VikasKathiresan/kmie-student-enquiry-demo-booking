@@ -1,4 +1,3 @@
-
 package kmie_enquiry_system;
 
 import java.net.URI;
@@ -26,8 +25,8 @@ public class StudentEnquiryRestController {
         this.repository = repository;
     }
 
-    // Only admins can list student information
-    @GetMapping
+    // Public read-only alias is available at /api/enquiries/list.
+    @GetMapping({"", "/list"})
     public List<StudentEnquiry> listEnquiries() {
         return repository.findAll();
     }

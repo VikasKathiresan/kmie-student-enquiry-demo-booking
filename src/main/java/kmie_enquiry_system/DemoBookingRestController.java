@@ -1,4 +1,3 @@
-
 package kmie_enquiry_system;
 
 import java.net.URI;
@@ -39,8 +38,8 @@ public class DemoBookingRestController {
         this.studentRepository = studentRepository;
     }
 
-    // GET: List all demo bookings
-    @GetMapping
+    // Public read-only alias is available at /api/bookings/list.
+    @GetMapping({"", "/list"})
     public List<BookingResponse> listBookings() {
 
         return bookingRepository.findAll()

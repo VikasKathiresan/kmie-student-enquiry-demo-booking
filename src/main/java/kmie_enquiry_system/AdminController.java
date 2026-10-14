@@ -1,4 +1,3 @@
-
 package kmie_enquiry_system;
 
 import java.time.LocalDate;
@@ -9,7 +8,10 @@ import java.util.stream.Stream;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class AdminController {
@@ -23,6 +25,11 @@ public class AdminController {
         this.repository = repository;
         this.bookingRepository = bookingRepository;
     }
+
+        @GetMapping({"/counsellor/login", "/login"})
+        public String counsellorLogin() {
+                return "counseller-login";
+        }
 
     @GetMapping("/admin/enquiries")
     public String viewEnquiries(
@@ -49,37 +56,19 @@ public class AdminController {
         // Preserve existing dashboard statistics
         List<StudentEnquiry> allEnquiries = repository.findAll();
 
-        long javaCount = allEnquiries.stream()
-                .filter(e -> "Java Full Stack"
+        long neetCount = allEnquiries.stream()
+                .filter(e -> "NEET"
                         .equalsIgnoreCase(e.getCourse()))
                 .count();
 
-        long pythonCount = allEnquiries.stream()
-                .filter(e -> "Python Development"
-                        .equalsIgnoreCase(e.getCourse()))
-                .count();
-
-        long webCount = allEnquiries.stream()
-                .filter(e -> "Web Development"
-                        .equalsIgnoreCase(e.getCourse()))
-                .count();
-
-        long analyticsCount = allEnquiries.stream()
-                .filter(e -> "Data Analytics"
-                        .equalsIgnoreCase(e.getCourse()))
-                .count();
-
-        long cloudCount = allEnquiries.stream()
-                .filter(e -> "Cloud Computing"
+        long jeeCount = allEnquiries.stream()
+                .filter(e -> "JEE"
                         .equalsIgnoreCase(e.getCourse()))
                 .count();
 
         model.addAttribute("totalEnquiries", allEnquiries.size());
-        model.addAttribute("javaCount", javaCount);
-        model.addAttribute("pythonCount", pythonCount);
-        model.addAttribute("webCount", webCount);
-        model.addAttribute("analyticsCount", analyticsCount);
-        model.addAttribute("cloudCount", cloudCount);
+        model.addAttribute("neetCount", neetCount);
+        model.addAttribute("jeeCount", jeeCount);
 
         // New: Demo bookings and filters
         List<DemoBooking> allBookings = bookingRepository.findAll();
@@ -119,5 +108,71 @@ public class AdminController {
         model.addAttribute("totalBookings", allBookings.size());
 
         return "admin-enquiries";
+    }
+
+    @PostMapping("/admin/bookings/{id}/approve")
+    public String approveBooking(
+            @PathVariable Long id,
+            @RequestParam(required = false, defaultValue = "") String keyword,
+            @RequestParam(required = false, defaultValue = "") String bookingDate,
+            @RequestParam(required = false, defaultValue = "") String bookingStatus,
+            RedirectAttributes redirectAttributes) {
+
+        bookingRepository.findById(id).ifPresentOrElse(booking -> {
+            if ("PENDING".equals(booking.getStatus())) {
+                booking.setStatus("CONFIRMED");
+                bookingRepository.save(booking);
+                redirectAttributes.addFlashAttribute(
+                        "bookingActionMessage", "Booking approved.");
+            } else {
+                redirectAttributes.addFlashAttribute(
+                        "bookingActionMessage",
+                        "Only pending bookings can be approved.");
+            }
+        }, () -> redirectAttributes.addFlashAttribute(
+                "bookingActionMessage", "Booking not found."));
+
+        return redirectToDashboard(
+                keyword, bookingDate, bookingStatus, redirectAttributes);
+    }
+
+    @PostMapping("/admin/bookings/{id}/cancel")
+    public String cancelBooking(
+            @PathVariable Long id,
+            @RequestParam(required = false, defaultValue = "") String keyword,
+            @RequestParam(required = false, defaultValue = "") String bookingDate,
+            @RequestParam(required = false, defaultValue = "") String bookingStatus,
+            RedirectAttributes redirectAttributes) {
+
+        bookingRepository.findById(id).ifPresentOrElse(booking -> {
+            String currentStatus = booking.getStatus();
+            if ("PENDING".equals(currentStatus)
+                    || "CONFIRMED".equals(currentStatus)) {
+                booking.setStatus("CANCELLED");
+                bookingRepository.save(booking);
+                redirectAttributes.addFlashAttribute(
+                        "bookingActionMessage", "Booking cancelled.");
+            } else {
+                redirectAttributes.addFlashAttribute(
+                        "bookingActionMessage",
+                        "This booking can no longer be cancelled.");
+            }
+        }, () -> redirectAttributes.addFlashAttribute(
+                "bookingActionMessage", "Booking not found."));
+
+        return redirectToDashboard(
+                keyword, bookingDate, bookingStatus, redirectAttributes);
+    }
+
+    private String redirectToDashboard(
+            String keyword,
+            String bookingDate,
+            String bookingStatus,
+            RedirectAttributes redirectAttributes) {
+
+        redirectAttributes.addAttribute("keyword", keyword);
+        redirectAttributes.addAttribute("bookingDate", bookingDate);
+        redirectAttributes.addAttribute("bookingStatus", bookingStatus);
+        return "redirect:/admin/enquiries";
     }
 }

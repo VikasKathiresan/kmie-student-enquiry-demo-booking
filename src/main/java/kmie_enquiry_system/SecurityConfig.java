@@ -1,9 +1,9 @@
-
 package kmie_enquiry_system;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,13 +20,25 @@ public class SecurityConfig {
             throws Exception {
 
         http
+            .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"))
+            .headers(headers -> headers
+                .frameOptions(frame -> frame.sameOrigin())
+            )
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/", "/enquiry", "/css/**",
-                        "/js/**", "/images/**").permitAll()
-                .requestMatchers("/admin/**", "/api/**").hasRole("ADMIN")
+                        "/js/**", "/images/**",
+                        "/counsellor/login", "/login").permitAll()
+                    .requestMatchers(HttpMethod.GET,
+                        "/api/enquiries/list",
+                        "/api/bookings/list").permitAll()
+                    .requestMatchers("/admin/**", "/api/**")
+                        .hasRole("COUNSELLOR")
                 .anyRequest().permitAll()
             )
             .formLogin(form -> form
+                .loginPage("/counsellor/login")
+                .loginProcessingUrl("/login")
+                .failureUrl("/counsellor/login?error")
                 .defaultSuccessUrl("/admin/enquiries", true)
                 .permitAll()
             )
@@ -44,9 +56,9 @@ public class SecurityConfig {
             @Value("${ADMIN_PASSWORD}") String adminPassword) {
 
         return new InMemoryUserDetailsManager(
-            User.withUsername("admin")
+            User.withUsername("counsellor")
                 .password(encoder.encode(adminPassword))
-                .roles("ADMIN")
+                .roles("COUNSELLOR")
                 .build()
         );
     }

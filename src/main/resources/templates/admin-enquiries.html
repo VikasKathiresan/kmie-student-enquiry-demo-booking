@@ -7,7 +7,7 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>KMIE - Admin Dashboard</title>
+    <title>KMIE - Counsellor Dashboard</title>
 
     <style>
         body {
@@ -158,6 +158,24 @@
             color: #142d55;
         }
 
+        .approve-btn {
+            border: 0;
+            padding: 9px 14px;
+            background: #166534;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .cancel-btn {
+            border: 0;
+            padding: 9px 14px;
+            background: #b91c1c;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
         .actions {
             display: flex;
             align-items: center;
@@ -192,7 +210,7 @@
 
 <body>
 
-<header>KMIE | Admin Dashboard</header>
+<header>KMIE | Counsellor Dashboard</header>
 
 <div class="container">
 
@@ -208,34 +226,16 @@
                  th:text="${totalEnquiries}">0</div>
         </div>
 
-        <div class="stat-card">
-            <h3>Java Full Stack</h3>
+           <div class="stat-card">
+              <h3>NEET Enquiries</h3>
             <div class="count"
-                 th:text="${javaCount}">0</div>
+                  th:text="${neetCount}">0</div>
         </div>
 
         <div class="stat-card">
-            <h3>Python Development</h3>
+              <h3>JEE Enquiries</h3>
             <div class="count"
-                 th:text="${pythonCount}">0</div>
-        </div>
-
-        <div class="stat-card">
-            <h3>Web Development</h3>
-            <div class="count"
-                 th:text="${webCount}">0</div>
-        </div>
-
-        <div class="stat-card">
-            <h3>Data Analytics</h3>
-            <div class="count"
-                 th:text="${analyticsCount}">0</div>
-        </div>
-
-        <div class="stat-card">
-            <h3>Cloud Computing</h3>
-            <div class="count"
-                 th:text="${cloudCount}">0</div>
+                  th:text="${jeeCount}">0</div>
         </div>
 
         <!-- NEW TOTAL BOOKINGS CARD -->
@@ -282,7 +282,9 @@
                     <th>Full Name</th>
                     <th>Email</th>
                     <th>Phone</th>
+                    <th>Class</th>
                     <th>Course</th>
+                    <th>Enquiry Date</th>
                     <th>Message</th>
                 </tr>
             </thead>
@@ -294,12 +296,14 @@
                     <td th:text="${enquiry.fullName}"></td>
                     <td th:text="${enquiry.email}"></td>
                     <td th:text="${enquiry.phone}"></td>
+                    <td th:text="${enquiry.studentClass}"></td>
                     <td th:text="${enquiry.course}"></td>
+                    <td th:text="${enquiry.enquiryDate}"></td>
                     <td th:text="${enquiry.message}"></td>
                 </tr>
 
                 <tr th:if="${#lists.isEmpty(enquiries)}">
-                    <td colspan="6">
+                    <td colspan="8">
                         No enquiries found.
                     </td>
                 </tr>
@@ -314,6 +318,10 @@
     <section class="booking-section">
 
         <h2>Demo Booking Management</h2>
+
+          <p th:if="${bookingActionMessage}"
+              th:text="${bookingActionMessage}"
+           role="status"></p>
 
         <h3>Filter Demo Bookings</h3>
 
@@ -346,11 +354,6 @@
                 <option value="CONFIRMED"
                         th:selected="${bookingStatus == 'CONFIRMED'}">
                     CONFIRMED
-                </option>
-
-                <option value="COMPLETED"
-                        th:selected="${bookingStatus == 'COMPLETED'}">
-                    COMPLETED
                 </option>
 
                 <option value="CANCELLED"
@@ -392,6 +395,7 @@
                         <th>Demo Date</th>
                         <th>Time Slot</th>
                         <th>Status</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
 
@@ -420,10 +424,55 @@
                             th:text="${booking.status}">
                         </td>
 
+                                <td>
+                            <form th:if="${booking.status == 'PENDING'}"
+                                  th:action="@{/admin/bookings/{id}/approve(id=${booking.id})}"
+                                  method="post">
+
+                                <input type="hidden"
+                                       th:name="${_csrf.parameterName}"
+                                       th:value="${_csrf.token}">
+                                <input type="hidden"
+                                       name="keyword"
+                                       th:value="${keyword}">
+                                <input type="hidden"
+                                       name="bookingDate"
+                                       th:value="${bookingDate}">
+                                <input type="hidden"
+                                       name="bookingStatus"
+                                       th:value="${bookingStatus}">
+
+                                <button class="approve-btn" type="submit">
+                                    Approve
+                                </button>
+                            </form>
+                            <form th:if="${booking.status == 'PENDING' or booking.status == 'CONFIRMED'}"
+                                  th:action="@{/admin/bookings/{id}/cancel(id=${booking.id})}"
+                                  method="post">
+
+                                <input type="hidden"
+                                       th:name="${_csrf.parameterName}"
+                                       th:value="${_csrf.token}">
+                                <input type="hidden"
+                                       name="keyword"
+                                       th:value="${keyword}">
+                                <input type="hidden"
+                                       name="bookingDate"
+                                       th:value="${bookingDate}">
+                                <input type="hidden"
+                                       name="bookingStatus"
+                                       th:value="${bookingStatus}">
+
+                                <button class="cancel-btn" type="submit">
+                                    Cancel
+                                </button>
+                            </form>
+                        </td>
+
                     </tr>
 
                     <tr th:if="${#lists.isEmpty(bookings)}">
-                        <td colspan="7">
+                        <td colspan="8">
                             No demo bookings found.
                         </td>
                     </tr>
