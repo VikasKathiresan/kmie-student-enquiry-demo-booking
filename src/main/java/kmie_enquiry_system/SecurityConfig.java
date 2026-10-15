@@ -20,20 +20,22 @@ public class SecurityConfig {
             throws Exception {
 
         http
-            .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"))
+            .csrf(csrf -> csrf.ignoringRequestMatchers(
+                "/h2-console/**", "/api/enquiries", "/api/bookings"))
             .headers(headers -> headers
                 .frameOptions(frame -> frame.sameOrigin())
             )
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/", "/enquiry", "/css/**",
-                        "/js/**", "/images/**",
+                        "/js/*", "/images/*",
                         "/counsellor/login", "/login").permitAll()
                     .requestMatchers(HttpMethod.GET,
-                        "/api/enquiries",
                         "/api/enquiries/list",
-                        "/api/bookings",
                         "/api/bookings/list").permitAll()
-                    .requestMatchers("/admin/**", "/api/**")
+                    .requestMatchers(HttpMethod.POST,
+                        "/api/enquiries",
+                        "/api/bookings").permitAll()
+                    .requestMatchers("/admin/*", "/api/*")
                         .hasRole("COUNSELLOR")
                 .anyRequest().permitAll()
             )
